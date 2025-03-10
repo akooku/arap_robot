@@ -1,0 +1,11 @@
+<library path="differential_drive_controller">
+  <class name="differential_drive_controller/DifferentialDriveController" 
+         type="differential_drive_controller::DifferentialDriveController" 
+         base_class_type="controller_interface::ControllerInterface">
+    <description>
+      The differential drive controller converts linear and angular velocity commands 
+      into appropriate wheel velocities for a four-wheeled differential drive robot.
+      It ensures accurate motion control using feedback from wheel encoders.
+    </description>
+  </class>
+</library>
