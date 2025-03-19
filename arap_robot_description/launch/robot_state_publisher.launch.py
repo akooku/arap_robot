@@ -111,6 +111,9 @@ def generate_launch_description():
         [pkg_share_description, 'urdf', 'robots', urdf_filename])
     default_rviz_config_path = PathJoinSubstitution(
         [pkg_share_description, 'rviz', rviz_config_filename])
+    ros2_controllers_path = PathJoinSubstitution([
+        pkg_share_description, 'config', 'ros2_controllers.yaml'
+    ])
 
     # Launch configuration variables
     jsp_gui = LaunchConfiguration('jsp_gui')
@@ -161,7 +164,8 @@ def generate_launch_description():
         output='screen',
         parameters=[{
             'use_sim_time': use_sim_time,
-            'robot_description': robot_description_content}])
+            'robot_description': robot_description_content}]
+    )
 
     # Publish the joint state values for the non-fixed joints in the URDF file.
     start_joint_state_publisher_cmd = Node(
@@ -178,6 +182,28 @@ def generate_launch_description():
         name='joint_state_publisher_gui',
         parameters=[{'use_sim_time': use_sim_time}],
         condition=IfCondition(jsp_gui))
+    
+    controller_manager_cmd = Node(
+        package="controller_manager",
+        executable="ros2_control_node",
+        name="controller_manager",
+        parameters=[ros2_controllers_path, {'use_sim_time': use_sim_time}],
+        output="screen"
+    )
+
+    load_joint_state_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
+        output="screen"
+    )
+
+    load_diff_drive_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["differential_drive_controller"],
+        output="screen"
+    )
 
     # Launch RViz
     start_rviz_cmd = Node(
@@ -205,6 +231,9 @@ def generate_launch_description():
     ld.add_action(start_joint_state_publisher_cmd)
     ld.add_action(start_joint_state_publisher_gui_cmd)
     ld.add_action(start_robot_state_publisher_cmd)
+    ld.add_action(controller_manager_cmd)
+    ld.add_action(load_joint_state_broadcaster)
+    ld.add_action(load_diff_drive_controller)
     ld.add_action(start_rviz_cmd)
 
     return ld

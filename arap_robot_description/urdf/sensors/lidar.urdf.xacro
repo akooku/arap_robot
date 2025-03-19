@@ -111,7 +111,7 @@
             <resolution>${range_resolution}</resolution>
           </range>
         </ray>
-        <gz_frame_id>${prefix}${frame_id}</gz_frame_id>
+        <!-- <gz_frame_id>${prefix}${frame_id}</gz_frame_id> -->
       </sensor>
     </gazebo>
   </xacro:macro>

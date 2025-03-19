@@ -21,6 +21,8 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 from launch_ros.actions import Node
 from launch_ros.substitutions import FindPackageShare
+from launch_ros.actions import LoadComposableNodes
+from launch_ros.parameter_descriptions import ParameterFile
 
 
 def generate_launch_description():
@@ -39,7 +41,7 @@ def generate_launch_description():
     package_name_bringup = 'arap_robot_bringup'
 
     default_robot_name = 'arap_robot'
-    default_world_file = 'empty.world'
+    default_world_file = 'cafe.world'
     gazebo_models_path = 'models'
     gazebo_worlds_path = 'worlds'
     ros_gz_bridge_config_file_path = 'config/ros_gz_bridge.yaml'
@@ -90,6 +92,8 @@ def generate_launch_description():
     declare_use_sim_time_cmd = DeclareLaunchArgument('use_sim_time', default_value='true', description='Use simulated time')
     declare_enable_odom_tf_cmd = DeclareLaunchArgument('enable_odom_tf', default_value='true', description='Enable odometry transform')
     declare_load_controllers_cmd = DeclareLaunchArgument('load_controllers', default_value='true', description='Load robot controllers')
+    declare_use_robot_state_pub_cmd = DeclareLaunchArgument('use_robot_state_pub', default_value='true', description='Enable Robot State Publisher')
+    declare_headless_cmd = DeclareLaunchArgument('headless', default_value='false', description='Run Gazebo in headless mode (no GUI)')
 
     # Robot State Publisher (if enabled)
     robot_state_publisher_cmd = IncludeLaunchDescription(
@@ -155,6 +159,20 @@ def generate_launch_description():
             '-Y', yaw
         ])
 
+    load_joint_state_broadcaster = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["joint_state_broadcaster"],
+        output="screen"
+    )
+
+    load_diff_drive_controller = Node(
+        package="controller_manager",
+        executable="spawner",
+        arguments=["diff_drive_controller"],
+        output="screen"
+    )
+
     # Create launch description
     ld = LaunchDescription()
 
@@ -166,6 +184,9 @@ def generate_launch_description():
     ld.add_action(declare_use_sim_time_cmd)
     ld.add_action(declare_enable_odom_tf_cmd)
     ld.add_action(declare_load_controllers_cmd)
+    ld.add_action(declare_use_robot_state_pub_cmd)
+    ld.add_action(declare_headless_cmd)
+
 
     # Add pose arguments
     ld.add_action(DeclareLaunchArgument('x', default_value='0.0', description='Initial x position'))
@@ -184,5 +205,7 @@ def generate_launch_description():
     ld.add_action(start_gazebo_ros_bridge_cmd)
     ld.add_action(start_gazebo_ros_image_bridge_cmd)
     ld.add_action(start_gazebo_ros_spawner_cmd)
+    ld.add_action(load_joint_state_broadcaster)
+    ld.add_action(load_diff_drive_controller)
 
     return ld

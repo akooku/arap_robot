@@ -8,11 +8,11 @@ controller_manager:
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-    diff_drive_controller:
+    differential_drive_controller:
       type: diff_drive_controller/DiffDriveController
 
 # Parameters for the differential drive controller
-diff_drive_controller:
+differential_drive_controller:
   ros__parameters:
     # Joint names for the left and right wheel pairs
     front_left_joint_name: ${prefix}front_left_wheel_joint
