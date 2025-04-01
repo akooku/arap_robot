@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+    <xacro:if value="$(arg sim_mode)">
+        <gazebo>
+            <plugin
+                filename="gz-sim-velocity-control-system"
+                name="gz::sim::systems::VelocityControl">
+                <topic>diff_drive_controller/cmd_vel</topic> <!-- Updated for differential drive -->
+                <initial_linear>0 0 0</initial_linear>
+                <initial_angular>0 0 0</initial_angular>
+            </plugin>
+        </gazebo>
+    </xacro:if>
+</robot>

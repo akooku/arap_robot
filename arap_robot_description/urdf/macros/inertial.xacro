@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!--
+File: inertial.xacro
+Project: ARAP Robot Description
+File Created: Saturday, 25th January 2025 12:49:58 PM
+Author: nknab
+Email: kojo.anyinam-boateng@alumni.ashesi.edu.gh
+Version: 1.0
+Brief: Contains macros for calculating the inertial properties of different shapes.
+~~~~~
+Last Modified: Wednesday, 19th March 2025 2:50:49 PM
+Modified By: nknab
+~~~~~
+Copyright ©2025 nknab
+-->
+
+
+<!--
+****************************************************************************
+*	Title: List of moments of inertia
+*   Author: Wikipedia contributors
+*   Date: Retrieved January 25, 2025
+*   Code version: N/A
+*   URL: https://en.wikipedia.org/wiki/List_of_moments_of_inertia
+****************************************************************************
+-->
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:macro name="sphere_inertial" params="prefix mass radius *origin">
+		<inertial name="${prefix}_inertial">
+			<xacro:insert_block name="origin" />
+			<mass value="${mass}" />
+			<inertia ixx="${(2/5) * mass * (radius*radius)}" ixy="0.0" ixz="0.0"
+				iyy="${(2/5) * mass * (radius*radius)}" iyz="0.0"
+				izz="${(2/5) * mass * (radius*radius)}" />
+		</inertial>
+	</xacro:macro>
+
+	<xacro:macro name="cylinder_inertial" params="prefix mass radius length *origin">
+		<inertial name="${prefix}_inertial">
+			<xacro:insert_block name="origin" />
+			<mass value="${mass}" />
+			<inertia ixx="${(1/12) * mass * (3*radius*radius + length*length)}" ixy="0.0" ixz="0.0"
+				iyy="${(1/12) * mass * (3*radius*radius + length*length)}" iyz="0.0"
+				izz="${(1/2) * mass * (radius*radius)}" />
+		</inertial>
+	</xacro:macro>
+
+	<xacro:macro name="box_inertial" params="prefix mass x y z *origin">
+		<inertial name="${prefix}_inertial">
+			<xacro:insert_block name="origin" />
+			<mass value="${mass}" />
+			<inertia ixx="${(1/12) * mass * (y*y + z*z)}" ixy="0.0" ixz="0.0"
+				iyy="${(1/12) * mass * (x*x + z*z)}" iyz="0.0" izz="${(1/12) * mass *(x*x + y*y)}" />
+		</inertial>
+	</xacro:macro>
+</robot>

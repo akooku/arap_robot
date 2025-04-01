@@ -1,0 +1,67 @@
+{
+  "name": "ARAP",
+  "dockerFile": "Dockerfile",
+  "runArgs": [
+    "--privileged"
+  ],
+  "workspaceMount": "source=${localWorkspaceFolder},target=/home/ubuntu/Development/ako_ws/src/${localWorkspaceFolderBasename},type=bind",
+  "workspaceFolder": "/home/ubuntu/Development/ako_ws/src/${localWorkspaceFolderBasename}",
+  "mounts": [
+    "source=${localEnv:HOME}${localEnv:USERPROFILE}/.bash_history,target=/home/vscode/.bash_history,type=bind"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/desktop-lite:1": {},
+    "ghcr.io/devcontainers-extra/features/ruff:1": {}
+  },
+  "forwardPorts": [
+    6080,
+    5901
+  ],
+  "portsAttributes": {
+    "6080": {
+      "label": "Web UI"
+    },
+    "5901": {
+      "label": "VNC"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "njpwerner.autodocstring",
+        "streetsidesoftware.code-spell-checker-british-english",
+        "ms-vscode.cpptools",
+        "ms-azuretools.vscode-docker",
+        "tamasfe.even-better-toml",
+        "VisualStudioExptTeam.vscodeintellicode",
+        "ms-vsliveshare.vsliveshare",
+        "ms-vscode.makefile-tools",
+        "bierner.markdown-mermaid",
+        "DavidAnson.vscode-markdownlint",
+        "jeff-hykin.polacode-2019",
+        "esbenp.prettier-vscode",
+        "psioniq.psi-header",
+        "ms-python.vscode-pylance",
+        "ms-python.python",
+        "ms-python.debugpy",
+        "ms-iot.vscode-ros",
+        "charliermarsh.ruff",
+        "Gruntfuggly.todo-tree",
+        "morningfrog.urdf-visualizer",
+        "redhat.vscode-xml",
+        "redhat.vscode-yaml",
+        "ms-dotnettools.vscode-dotnet-runtime",
+        "eamodio.gitlens",
+        "twxs.cmake",
+        "ms-vscode.cpptools-extension-pack",
+        "formulahendry.auto-rename-tag",
+        "formulahendry.auto-close-tag",
+        "DotJoshJohnson.xml",
+        "ms-vscode.cmake-tools",
+        "aaron-bond.better-comments",
+        "SanchitVerma.block-comments",
+        "dnut.rewrap-revived"
+      ]
+    }
+  }
+}

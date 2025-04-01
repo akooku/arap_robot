@@ -1,0 +1,68 @@
+---
+# Gazebo Clock topic: Synchronizes simulation time with ROS.
+- ros_topic_name: "clock"
+  gz_topic_name: "clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+  
+# RGBD Camera topics
+- ros_topic_name: "cam_one/color/camera_info"
+  gz_topic_name: "cam_one/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+  lazy: true  # Determines whether connections are created immediately at startup
+              # (false) or only when data is actually requested by a subscriber (true).
+              # This helps conserve system resources at the cost of potential initial
+              # delays in data flow.
+
+- ros_topic_name: "cam_one/depth/color/points"
+  gz_topic_name: "cam_one/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+  lazy: true
+
+# LIDAR configuration
+- ros_topic_name: "scan"
+  gz_topic_name: "scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "gz.msgs.LaserScan"
+  direction: GZ_TO_ROS
+  lazy: false
+
+# Odometry topic: Publishes odometry data from Gazebo to ROS.
+- ros_topic_name: "odom"
+  gz_topic_name: "odom"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "gz.msgs.Odometry"
+  direction: GZ_TO_ROS
+
+# TF topic: Publishes transform data from Gazebo to ROS.
+- ros_topic_name: "tf"
+  gz_topic_name: "tf"
+  ros_type_name: "tf2_msgs/msg/TFMessage"
+  gz_type_name: "gz.msgs.Pose_V"
+  direction: GZ_TO_ROS
+
+# Command Velocity topic: Sends velocity commands from ROS to Gazebo.
+- ros_topic_name: "cmd_vel"
+  gz_topic_name: "cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "gz.msgs.Twist"
+  direction: ROS_TO_GZ
+
+# Joint States topic: Publishes joint state data from Gazebo to ROS.
+- ros_topic_name: "joint_states"
+  gz_topic_name: "joint_states"
+  ros_type_name: "sensor_msgs/msg/JointState"
+  gz_type_name: "gz.msgs.Model"
+  direction: GZ_TO_ROS
+
+# IMU topic: Publishes IMU sensor data from Gazebo to ROS.
+- ros_topic_name: "imu"
+  gz_topic_name: "imu"
+  ros_type_name: "sensor_msgs/msg/Imu"
+  gz_type_name: "gz.msgs.IMU"
+  direction: GZ_TO_ROS

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>arap_robot_description</name>
+  <version>0.0.0</version>
+  <description>
+    Contains the robot description files that define the physical aspects of a robot,
+    including its geometry, kinematics, dynamics, and visual aspects.
+  </description>
+
+  <maintainer email="aix@todo.todo">aix</maintainer>
+  <license>BSD-3-Clause</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Core dependencies -->
+  <depend>urdf_tutorial</depend>
+  <depend>image-transport-plugins</depend>
+  <depend>joint_state_broadcaster</depend>
+  <depend>joint_state_publisher</depend>
+  <depend>robot_state_publisher</depend>
+  <depend>ros_gz_bridge</depend>
+  <depend>ros_gz_sim</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>rviz2</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf2</depend>
+  <depend>xacro</depend>
+
+  <!-- Testing -->
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

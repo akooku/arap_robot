@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="arap_robot">
+
+	<!-- Imports -->
+	<xacro:include filename="$(find arap_robot_description)/urdf/robots/limo.xacro" />
+
+	<!-- <xacro:include filename="$(find arap_robot_description)/urdf/control/diff/velocity_control.xacro" /> -->
+
+	<xacro:if value="$(arg use_ros2_control)">
+		<xacro:include filename="$(find arap_robot_description)/urdf/control/diff/ros2_control.xacro" />
+	</xacro:if>
+
+	<xacro:unless value="$(arg use_ros2_control)">
+		<xacro:include filename="$(find arap_robot_description)/urdf/control/diff/gazebo_control.xacro" />
+	</xacro:unless>
+
+	<!-- Wheels -->
+	<xacro:wheel_setup wheel_type="regular" config="diff" />
+
+</robot>

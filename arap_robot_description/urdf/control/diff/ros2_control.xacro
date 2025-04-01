@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <xacro:if value="$(arg sim_mode)">
+
+        <ros2_control name="GazeboSimSystem" type="system">
+            <hardware>
+                <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+            </hardware>
+
+            <joint name="front_left_wheel_joint" type="continuous">
+                <command_interface name="velocity">
+                    <param name="min">-50.0</param>
+                    <param name="max">50.0</param>
+                </command_interface>
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+            </joint>
+
+            <joint name="front_right_wheel_joint" type="continuous">
+                <command_interface name="velocity">
+                    <param name="min">-50.0</param>
+                    <param name="max">50.0</param>
+                </command_interface>
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+            </joint>
+
+            <joint name="rear_left_wheel_joint" type="continuous">
+                <command_interface name="velocity">
+                    <param name="min">-50.0</param>
+                    <param name="max">50.0</param>
+                </command_interface>
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+            </joint>
+
+            <joint name="rear_right_wheel_joint" type="continuous">
+                <command_interface name="velocity">
+                    <param name="min">-50.0</param>
+                    <param name="max">50.0</param>
+                </command_interface>
+                <state_interface name="position" />
+                <state_interface name="velocity" />
+            </joint>
+
+        </ros2_control>
+
+    </xacro:if>
+
+    <gazebo>
+        <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(find arap_robot_description)/config/ros2_controllers.yaml</parameters>
+            <parameters>$(find arap_robot_description)/config/gz_ros2_ctrl_use_sim.yaml</parameters>
+            <ros>
+                <remapping>/controller_manager/robot_description:=/robot_description</remapping>
+            </ros>
+        </plugin>
+    </gazebo>
+
+
+</robot>

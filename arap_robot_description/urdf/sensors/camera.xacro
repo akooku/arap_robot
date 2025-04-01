@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:macro name="camera" params="parent_prefix *joint_pose">
+    <joint name="camera_joint" type="fixed">
+      <parent link="${parent_prefix}" />
+      <child link="camera_link" />
+      <xacro:insert_block name="joint_pose" />
+    </joint>
+
+
+    <link name='camera_link'>
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <mass value="0.1" />
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+      </inertial>
+      <visual name='camera_visual'>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.02 0.06 0.015" />
+        </geometry>
+        <material name='camera_material'>
+          <color rgba="0.1 0.1 0.2 0" />
+        </material>
+      </visual>
+      <collision name='camera_collision'>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+          <box size="0.02 0.06 0.015" />
+        </geometry>
+      </collision>
+    </link>
+
+    <joint name="camera_optical_joint" type="fixed">
+      <parent link="camera_link" />
+      <child link="camera_optical_link" />
+      <origin xyz="0 0 0" rpy="${-M_PI/2} 0 ${-M_PI/2} " />
+    </joint>
+
+    <link name="camera_optical_link" />
+
+    <gazebo reference="camera_link">
+      <sensor name="camera" type="camera">
+        <pose>0 0 0 0 0 0</pose>
+        <always_on>true</always_on>
+        <update_rate>10</update_rate>
+        <visualize>true</visualize>
+        <camera>
+          <camera_info_topic>camera/camera_info</camera_info_topic>
+          <horizontal_fov>1.047</horizontal_fov>
+          <image>
+            <width>640</width>
+            <height>480</height>
+            <format>R8G8B8</format>
+          </image>
+          <clip>
+            <near>0.02</near>
+            <far>300</far>
+          </clip>
+        </camera>
+        <topic>camera/image_raw</topic>
+        <gz_frame_id>camera_optical_link</gz_frame_id>
+      </sensor>
+    </gazebo>
+  </xacro:macro>
+</robot>

@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<xacro:wheel_setup wheel_type="mecanum" config="mecanum" />
+	
+</robot>

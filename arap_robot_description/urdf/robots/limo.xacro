@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+	<!--  ARGUMENTS  -->
+	<xacro:arg name="use_ros2_control" default="true" />
+	<xacro:arg name="sim_mode" default="true" />
+	<xacro:arg name="robot_name" default="arap_robot" />
+	<xacro:arg name="prefix" default="" />
+	<xacro:arg name="drive_system" default="diff" />
+	<xacro:arg name="use_gazebo" default="true" />
+
+	<!-- Variables -->
+	<xacro:property name="M_PI" value="3.14159" />
+
+	<!-- Robot Variables -->
+	<xacro:property name="base_mass" value="2.1557" />
+
+	<xacro:property name="wheelbase" value="0.2" />
+	<xacro:property name="track" value="0.13" />
+	<xacro:property name="wheel_vertical_offset" value="0.05" />
+
+	<xacro:property name="wheel_radius" value="0.045" />
+	<xacro:property name="wheel_length" value="0.001" />
+	<xacro:property name="wheel_mass" value="0.5" />
+
+	<xacro:property name="wheel_separation" value="0.172" />
+	<xacro:property name="max_linear_acceleration" value="1.0" />
+
+	<xacro:property name="kingpin_width" value="0.122" />
+	<xacro:property name="steering_limit" value="0.523598767" />
+
+
+	<!-- IMPORTS -->
+	<xacro:include filename="$(find arap_robot_description)/urdf/macros/material.xacro" />
+	<xacro:include filename="$(find arap_robot_description)/urdf/macros/common.xacro" />
+	<xacro:include filename="$(find arap_robot_description)/urdf/macros/inertial.xacro" />
+	<xacro:include filename="$(find arap_robot_description)/urdf/macros/wheels.xacro" />
+
+	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/laser.xacro" />
+	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/imu.xacro" />
+	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/camera.xacro" />
+
+	<!-- Base link -->
+	<link name="base_link" />
+
+	<!-- Chassis -->
+	<joint name="chassis_joint" type="fixed">
+		<parent link="base_link" />
+		<child link="chassis" />
+		<origin xyz="0.0 0.0 0.15" />
+	</joint>
+
+	<link name="chassis">
+		<visual name="chassis_visual">
+			<origin xyz="0 0 -0.15" rpy="0 0 1.57" />
+			<geometry>
+				<mesh filename="package://arap_robot_description/meshes/chassis/chassis.dae"
+					scale="1 1 1" />
+			</geometry>
+		</visual>
+		<collision name="chassis_collision">
+			<origin xyz="0 0 -0.15" rpy="0 0 1.57" />
+			<geometry>
+				<mesh filename="package://arap_robot_description/meshes/chassis/chassis.stl"
+					scale="1 1 1" />
+			</geometry>
+		</collision>
+		<inertial name="chassis_inertial">
+			<origin xyz="0 0 0" rpy="0 0 1.57" />
+			<mass value="${base_mass}" />
+			<inertia ixx="0.0043832566666666675" ixy="0" ixz="0" iyy="0.004832360833333334" iyz="0"
+				izz="0.005622784166666667" />
+		</inertial>
+	</link>
+
+	<!-- Sensors -->
+	<xacro:laser parent_prefix="chassis">
+		<origin xyz="0.103 0 -0.034" rpy="0 0 0" />
+	</xacro:laser>
+
+	<xacro:camera parent_prefix="chassis">
+		<origin xyz="0.084 0 0.026" rpy="0 0 0" />
+	</xacro:camera>
+
+	<xacro:imu parent_prefix="chassis">
+		<origin xyz="0 0 -0.1" rpy="0 0 0" />
+	</xacro:imu>
+
+</robot>
