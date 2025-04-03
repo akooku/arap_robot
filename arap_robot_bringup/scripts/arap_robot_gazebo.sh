@@ -16,11 +16,11 @@ trap 'cleanup' SIGINT SIGTERM
 # gz service -s /gui/move_to/pose --reqtype gz.msgs.GUICamera --reptype gz.msgs.Boolean --timeout 2000 --req "pose: {position: {x: 0.0, y: -2.0, z: 2.0} orientation: {x: -0.2706, y: 0.2706, z: 0.6533, w: 0.6533}}"
 
 echo "Launching Gazebo simulation for ARAP Robot..."
-ros2 launch arap_robot_gazebo test.gazebo.launch.py \
+ros2 launch arap_robot_gazebo sim.launch.py \
     enable_odom_tf:=true \
     headless:=False \
     load_controllers:=true \
-    world_file:=cafe.world \
+    world:=cafe \
     use_rviz:=true \
     use_robot_state_pub:=true \
     use_sim_time:=true \

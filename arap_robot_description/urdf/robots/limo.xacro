@@ -23,7 +23,7 @@
 	<xacro:property name="wheel_length" value="0.001" />
 	<xacro:property name="wheel_mass" value="0.5" />
 
-	<xacro:property name="wheel_separation" value="0.172" />
+	<xacro:property name="wheel_separation" value="0.175" />
 	<xacro:property name="max_linear_acceleration" value="1.0" />
 
 	<xacro:property name="kingpin_width" value="0.122" />

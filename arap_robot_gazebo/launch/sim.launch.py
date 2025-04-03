@@ -56,7 +56,7 @@ def launch_setup(context: LaunchContext) -> list:
     # Get the launch configuration variables
     world = LaunchConfiguration("world").perform(context)
 
-    # Append GZ_SIM_RESOURCE_PATH
+    # Append GZ_SIM_RESOURCE_PATH - MOVE THIS BEFORE CREATING THE LAUNCH ACTIONS
     model_path = join(pkg_gz, "models")
     set_model_path = AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", model_path)
 
@@ -81,7 +81,7 @@ def launch_setup(context: LaunchContext) -> list:
         PythonLaunchDescriptionSource([join(pkg_descr, "launch", "spawn.launch.py")]),
     )
 
-    return [gazebo, spawn, set_model_path]
+    return [set_model_path, gazebo, spawn]
 
 
 def generate_launch_description() -> LaunchDescription:
@@ -98,7 +98,7 @@ def generate_launch_description() -> LaunchDescription:
         DeclareLaunchArgument(
             "world",
             default_value="empty",
-            choices=["empty", "cafe", "house"],
+            choices=["empty", "cafe", "house", "ashesi"],
             description="The world to load",
         ),
         OpaqueFunction(function=launch_setup),

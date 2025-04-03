@@ -88,14 +88,14 @@
         <visual name="ashesi_visual">
           <geometry>
             <mesh>
-              <uri>file://ash_3d.dae</uri>
+              <uri>file://Capstone_map.dae</uri>
             </mesh>
           </geometry>
         </visual>
         <collision name="ashesi_collision">
           <geometry>
             <mesh>
-              <uri>file://ash_3d.dae</uri>
+              <uri>file://Capstone_map.dae</uri>
             </mesh>
           </geometry>
         </collision>
