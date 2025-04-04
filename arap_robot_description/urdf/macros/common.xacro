@@ -1,57 +1,71 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-	<!-- Joint State Publisher Plugin -->
-	<xacro:macro name="joint_state_publisher_plugin">
-		<plugin filename="gz-sim-joint-state-publisher-system"
-			name="gz::sim::systems::JointStatePublisher">
-			<topic>joint_states</topic>
-			<joint_name>front_left_wheel_joint</joint_name>
-			<joint_name>front_right_wheel_joint</joint_name>
-			<joint_name>rear_left_wheel_joint</joint_name>
-			<joint_name>rear_right_wheel_joint</joint_name>
-		</plugin>
-	</xacro:macro>
+  <!-- Joint State Publisher Plugin -->
+  <xacro:macro name="joint_state_publisher_plugin">
+    <plugin filename="gz-sim-joint-state-publisher-system"
+      name="gz::sim::systems::JointStatePublisher">
+      <topic>joint_states</topic>
+      <joint_name>front_left_wheel_joint</joint_name>
+      <joint_name>front_right_wheel_joint</joint_name>
+      <joint_name>rear_left_wheel_joint</joint_name>
+      <joint_name>rear_right_wheel_joint</joint_name>
+    </plugin>
+  </xacro:macro>
 
-	<!-- Common Gazebo Control Plugin Parameters -->
-	<xacro:macro name="gazebo_control_common_plugin_params">
-		<!-- Input -->
-		<topic>cmd_vel</topic>
+  <!-- Common Gazebo Control Plugin Parameters -->
+  <xacro:macro name="gazebo_control_common_plugin_params">
+    <!-- Input -->
+    <topic>cmd_vel</topic>
 
-		<!-- Output -->
-		<frame_id>odom</frame_id>
-		<child_frame_id>base_link</child_frame_id>
-		<odom_topic>odom</odom_topic>
-		<odom_publisher_frequency>30</odom_publisher_frequency>
+    <!-- Output -->
+    <frame_id>odom</frame_id>
+    <child_frame_id>base_link</child_frame_id>
+    <odom_topic>odom</odom_topic>
+    <odom_publisher_frequency>30</odom_publisher_frequency>
 
-		<tf_topic>/tf</tf_topic>
-	</xacro:macro>
+    <tf_topic>/tf</tf_topic>
+    <publish_odom_tf>true</publish_odom_tf>
+    <publish_wheel_tf>true</publish_wheel_tf>
+    <odometry_source>world</odometry_source>
+    <update_rate>30.0</update_rate>
+  </xacro:macro>
 
-	<xacro:macro name="wheel_setup" params="wheel_type config">
-		<xacro:property name="wheel_type" value="${wheel_type}" />
+  <xacro:macro name="wheel_setup" params="wheel_type config">
+    <xacro:property name="wheel_type" value="${wheel_type}" />
 
-		<!-- Wheels -->
+    <!-- Wheels -->
+    <xacro:wheel wheel_prefix="front_left" parent_prefix="base_link" reflect="1"
+      wheel_type="${wheel_type}">
+      <origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:wheel>
 
-		<xacro:wheel wheel_prefix="front_left" parent_prefix="base_link" reflect="1"
-			wheel_type="${wheel_type}">
-			<origin xyz="${wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
-		</xacro:wheel>
+    <xacro:wheel wheel_prefix="front_right" parent_prefix="base_link" reflect="-1"
+      wheel_type="${wheel_type}">
+      <origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="${M_PI} 0 0" />
+    </xacro:wheel>
 
-		<xacro:wheel wheel_prefix="front_right" parent_prefix="base_link" reflect="-1"
-			wheel_type="${wheel_type}">
-			<origin xyz="${wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="${M_PI} 0 0" />
-		</xacro:wheel>
+    <xacro:wheel wheel_prefix="rear_left" parent_prefix="base_link" reflect="1"
+      wheel_type="${wheel_type}">
+      <origin xyz="${-wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
+    </xacro:wheel>
 
-		<xacro:wheel wheel_prefix="rear_left" parent_prefix="base_link" reflect="1"
-			wheel_type="${wheel_type}">
-			<origin xyz="${-wheelbase/2} ${track/2} ${wheel_vertical_offset}" rpy="0 0 0" />
-		</xacro:wheel>
+    <xacro:wheel wheel_prefix="rear_right" parent_prefix="base_link" reflect="-1"
+      wheel_type="${wheel_type}">
+      <origin xyz="${-wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="${M_PI} 0 0" />
+    </xacro:wheel>
+  </xacro:macro>
 
-		<xacro:wheel wheel_prefix="rear_right" parent_prefix="base_link" reflect="-1"
-			wheel_type="${wheel_type}">
-			<origin xyz="${-wheelbase/2} ${-track/2} ${wheel_vertical_offset}" rpy="${M_PI} 0 0" />
-		</xacro:wheel>
-	</xacro:macro>
-
+  <!-- Pose Publisher Plugin Macro -->
+  <xacro:macro name="pose_publisher_plugin">
+    <plugin filename="gz-sim-pose-publisher-system" name="gz::sim::systems::PosePublisher">
+      <publish_link_pose>true</publish_link_pose>
+      <publish_collision_pose>false</publish_collision_pose>
+      <publish_visual_pose>false</publish_visual_pose>
+      <publish_nested_model_pose>false</publish_nested_model_pose>
+      <use_pose_vector_msg>true</use_pose_vector_msg>
+      <update_rate>30.0</update_rate>
+    </plugin>
+  </xacro:macro>
 
 </robot>

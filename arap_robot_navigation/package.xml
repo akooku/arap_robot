@@ -1,0 +1,80 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>arap_robot_navigation</name>
+  <version>0.0.0</version>
+  <description>Package for robot navigationn using Nav2 Stack</description>
+  <maintainer email="ako@example.com">Ako</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <!-- For Python -->
+  <depend>rclpy</depend>
+  <depend>python3</depend>
+
+  <!-- Core Navigation System -->
+  <depend>nav2_bringup</depend>
+  <depend>nav2_common</depend>
+  <depend>nav2_core</depend>
+  <depend>nav2_msgs</depend>
+  <depend>nav2_util</depend>
+
+  <!-- Map and Localization -->
+  <depend>nav2_map_server</depend>
+  <depend>nav2_amcl</depend>
+
+  <!-- Controllers -->
+  <depend>nav2_controller</depend>
+  <depend>nav2_dwb_controller</depend>
+  <depend>dwb_core</depend>
+  <depend>dwb_critics</depend>
+  <depend>dwb_plugins</depend>
+
+  <!-- Alternative Controllers (if needed) -->
+  <depend>nav2_regulated_pure_pursuit_controller</depend>
+  <depend>nav2_mppi_controller</depend>
+
+  <!-- Planners -->
+  <depend>nav2_planner</depend>
+  <depend>nav2_navfn_planner</depend>
+  <depend>nav2_smac_planner</depend>
+  <depend>nav2_theta_star_planner</depend>
+
+  <!-- Behaviors and BT Navigator -->
+  <depend>nav2_behaviors</depend>
+  <depend>nav2_bt_navigator</depend>
+  <depend>nav_2d_utils</depend>
+  <depend>nav2_waypoint_follower</depend>
+  <depend>nav2_velocity_smoother</depend>
+
+  <!-- SLAM (if you're using it) -->
+  <depend>slam_toolbox</depend>
+
+  <!-- Lifecycle Management -->
+  <depend>nav2_lifecycle_manager</depend>
+
+  <!-- Costmap Related -->
+  <depend>nav2_costmap_2d</depend>
+  <depend>nav2_voxel_grid</depend>
+
+  <!-- ROS2 Navigation Dependencies -->
+  <depend>tf2</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+  <depend>std_msgs</depend>
+  <depend>std_srvs</depend>
+  <depend>visualization_msgs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

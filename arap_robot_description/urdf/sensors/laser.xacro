@@ -57,6 +57,7 @@
 					</noise>
 				</lidar>
 				<topic>scan</topic>
+				<frame_name>laser_frame</frame_name>
 				<gz_frame_id>laser_frame</gz_frame_id>
 			</sensor>
 		</gazebo>

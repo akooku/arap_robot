@@ -135,7 +135,7 @@ def generate_launch_description() -> LaunchDescription:
         DeclareLaunchArgument(
             "rviz_config",
             default_value="arap_robot_description",
-            choices=["arap_robot_description"],
+            choices=["arap_robot_description", "nav2_default_view"],
             description="Name of the RViz configuration file",
         ),
         DeclareLaunchArgument(

@@ -33,6 +33,7 @@
             <sensor name="imu" type="imu">
                 <always_on>true</always_on>
                 <update_rate>100</update_rate>
+                <frame_name>imu_link</frame_name>
                 <visualize>true</visualize>
                 <imu>
                     <angular_velocity>

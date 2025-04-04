@@ -14,7 +14,7 @@
 
   <!-- Core dependencies -->
   <depend>urdf_tutorial</depend>
-  <depend>image-transport-plugins</depend>
+  <depend>image_transport_plugins</depend>
   <depend>joint_state_broadcaster</depend>
   <depend>joint_state_publisher</depend>
   <depend>robot_state_publisher</depend>

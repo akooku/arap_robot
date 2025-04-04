@@ -59,6 +59,7 @@ def launch_setup(context: LaunchContext) -> list:
             "sim_mode": "true",
             "robot_type": robot,
             "jsp_gui": "false",
+            "use_rviz": "false",
         }.items(),
     )
 

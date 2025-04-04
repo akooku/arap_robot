@@ -18,6 +18,7 @@
   <depend>rclcpp</depend>
   <depend>rclcpp_action</depend>
 
+  <!-- Other Dependencies -->
   <depend>geometry_msgs</depend>
   <depend>rcl_interfaces</depend>
   <depend>std_msgs</depend>
