@@ -21,6 +21,7 @@ setup(
     entry_points={
         'console_scripts': [
             'square_diff_drive_controller = arap_robot_system_tests.square_diff_drive_controller:main',
+            'robot_nodes = arap_robot_system_tests.robot_nodes:main'
         ],
     },
 )

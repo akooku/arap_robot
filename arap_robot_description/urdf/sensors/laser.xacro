@@ -35,7 +35,7 @@
 				<pose> 0 0 0 0 0 0 </pose>
 				<always_on>true</always_on>
 				<visualize>true</visualize>
-				<update_rate>10</update_rate>
+				<update_rate>2</update_rate>
 				<lidar>
 					<scan>
 						<horizontal>

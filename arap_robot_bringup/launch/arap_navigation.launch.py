@@ -25,7 +25,7 @@ from launch.actions import (
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node
-from launch.conditions import IfCondition
+from launch.conditions import IfCondition, UnlessCondition
 
 # === Constants === #
 PACKAGE_NAME = "arap_robot_description"
@@ -51,6 +51,7 @@ def launch_setup(context: LaunchContext) -> list:
     use_rviz = LaunchConfiguration("use_rviz").perform(context)
     rviz_config = LaunchConfiguration("rviz_config").perform(context)
     slam = LaunchConfiguration("slam").perform(context)
+    debug = LaunchConfiguration("debug").perform(context)
     
     # World path
     world_path = join(gz_pkg_share, "worlds", f"{world}.world")
@@ -216,16 +217,7 @@ def launch_setup(context: LaunchContext) -> list:
         executable='sync_slam_toolbox_node',
         name='slam_toolbox',
         output='screen',
-        parameters=[
-            {'use_sim_time': use_sim_time.lower() == 'true'},
-            {'max_laser_range': 20.0},
-            {'resolution': 0.05},
-            {'map_update_interval': 5.0},
-            {'map_frame': 'map'},
-            {'base_frame': 'base_link'},
-            {'odom_frame': 'odom'},
-            {'scan_topic': 'scan'}
-        ]
+        parameters=[params_file]
     )
     
     # Launch the ROS 2 Navigation Stack
@@ -244,6 +236,7 @@ def launch_setup(context: LaunchContext) -> list:
 
     # Map to Odom static transform [TEMPORARY SOLUTION]
     map_to_odom_tf = Node(
+        condition=UnlessCondition(slam),
         package='tf2_ros',
         executable='static_transform_publisher',
         name='static_map_to_odom',
@@ -251,8 +244,27 @@ def launch_setup(context: LaunchContext) -> list:
         parameters=[{'use_sim_time': use_sim_time.lower() == 'true'}]
     )
 
+    # Debug node to print TF tree
+    tf_debug = Node(
+        condition=IfCondition(debug),  # Add a debug launch argument
+        package='tf2_tools',
+        executable='view_frames',
+        name='view_frames',
+        output='screen'
+    )
+
+    odom_checker = Node(
+        condition=IfCondition(debug),
+        package='topic_tools',
+        executable='echo',
+        name='odom_checker',
+        output='screen',
+        arguments=['/odom'],
+        parameters=[{'use_sim_time': use_sim_time.lower() == 'true'}]
+    )
+
     launch_nodes = [
-        map_to_odom_tf,
+        # map_to_odom_tf,
         set_model_path, 
         gazebo, 
         spawn, 
@@ -269,7 +281,9 @@ def launch_setup(context: LaunchContext) -> list:
         bt_navigator,
         nav_lifecycle_manager,
         slam_toolbox,
-        # nav2_launch
+        # nav2_launch,
+        tf_debug,
+        odom_checker,
     ]
 
     return launch_nodes
@@ -324,6 +338,12 @@ def generate_launch_description() -> LaunchDescription:
             default_value="true",
             choices=["true", "false"],
             description="Whether to start RViz"
+        ),
+        DeclareLaunchArgument(
+            "debug",
+            default_value="false",
+            choices=["true", "false"],
+            description="Enable debugging output"
         ),
         
         OpaqueFunction(function=launch_setup)
