@@ -59,6 +59,7 @@
   ros_type_name: "sensor_msgs/msg/JointState"
   gz_type_name: "gz.msgs.Model"
   direction: GZ_TO_ROS
+  lazy: false
 
 # IMU topic: Publishes IMU sensor data from Gazebo to ROS.
 - ros_topic_name: "imu"

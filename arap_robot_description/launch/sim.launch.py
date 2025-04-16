@@ -23,12 +23,14 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     OpaqueFunction,
+    AppendEnvironmentVariable,
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
 # CONSTANTS
 PACKAGE_NAME = "arap_robot_description"
+PACKAGE_GZ = "arap_robot_gazebo"
 
 
 def launch_setup(context: LaunchContext) -> list:
@@ -49,12 +51,17 @@ def launch_setup(context: LaunchContext) -> list:
 
     # Get the package share directory
     pkg_share = FindPackageShare(package=PACKAGE_NAME).find(PACKAGE_NAME)
+    pkg_gz = FindPackageShare(package=PACKAGE_GZ).find(PACKAGE_GZ)
 
     # Get the launch configuration variables
     world = LaunchConfiguration("world").perform(context)
 
+    # Append GZ_SIM_RESOURCE_PATH
+    model_path = join(pkg_gz, "models")
+    set_model_path = AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", model_path)
+
     # Gazebo launch file
-    world_filepath = join(pkg_share, "worlds", f"{world}.world")
+    world_filepath = join(pkg_gz, "worlds", f"{world}.world")
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             join(
@@ -74,7 +81,7 @@ def launch_setup(context: LaunchContext) -> list:
         PythonLaunchDescriptionSource([join(pkg_share, "launch", "spawn.launch.py")]),
     )
 
-    return [gazebo, spawn]
+    return [set_model_path, gazebo, spawn]
 
 
 def generate_launch_description() -> LaunchDescription:

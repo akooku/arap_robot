@@ -1,7 +1,12 @@
 <?xml version="1.0" ?>
 
 <sdf version="1.6">
-  <world name="default">
+  <world name="empty">
+
+    <physics name="bullet" type="bullet">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
 
     <!-- Plugin for simulating physics -->
     <plugin

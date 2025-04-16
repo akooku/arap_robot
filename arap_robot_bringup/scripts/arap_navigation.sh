@@ -58,9 +58,9 @@ ros2 launch arap_robot_bringup arap_navigation.launch.py \
    roll:=0.0 \
    pitch:=0.0 \
    yaw:=0.0 \
-   debug:=true \
-   "$SLAM_ARG" \
-  "$MAP_ARG" &
+   debug:=true &
+  #  "$SLAM_ARG" \
+  # "$MAP_ARG" 
 
 echo "⏳ Waiting 25 seconds for simulation to initialize..."
 sleep 25

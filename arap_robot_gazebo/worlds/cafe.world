@@ -1,6 +1,16 @@
 <?xml version="1.0" ?>
 <sdf version="1.6">
-  <world name="default">
+  <world name="cafe">
+
+    <physics name="bullet" type="bullet">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
+
+    <physics name="1ms" type="ignored">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1.0</real_time_factor>
+    </physics>
 
     <!-- Plugin for simulating physics -->
     <plugin
@@ -62,6 +72,11 @@
                 <mu>0.0</mu>
                 <mu2>0.0</mu2>
               </ode>
+              <bullet>
+                <friction>1</friction>
+                <friction2>1</friction2>
+                <rolling_friction>0.1</rolling_friction>
+              </bullet>
             </friction>
           </surface>
         </collision>

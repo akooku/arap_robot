@@ -20,7 +20,8 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     OpaqueFunction,
-    AppendEnvironmentVariable
+    AppendEnvironmentVariable,
+    TimerAction
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
@@ -38,6 +39,7 @@ def launch_setup(context: LaunchContext) -> list:
     loc_pkg_share = get_package_share_directory(LOCALIZATION_PACKAGE)
     gz_pkg_share = get_package_share_directory(GAZEBO_PACKAGE)
     nav_pkg_share = get_package_share_directory(NAVIGATION_PACKAGE)
+    pkg_slam_toolbox = get_package_share_directory('slam_toolbox')
     
     # Get Nav2 package dir for the launch files
     nav2_dir = get_package_share_directory('nav2_bringup')
@@ -210,14 +212,16 @@ def launch_setup(context: LaunchContext) -> list:
         ]
     )
 
-    # SLAM Toolbox (only activated when in SLAM mode)
-    slam_toolbox = Node(
-        condition=IfCondition(slam),
-        package='slam_toolbox',
-        executable='sync_slam_toolbox_node',
-        name='slam_toolbox',
-        output='screen',
-        parameters=[params_file]
+    # SLAM Toolbox (delayed to ensure odometry is available)
+    slam_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(join(pkg_slam_toolbox, 'launch', 'online_async_launch.py')),
+        launch_arguments={'use_sim_time': 'true',
+                          'slam_params_file':params_file}.items()
+    )
+
+    delayed_slam = TimerAction(
+        period=15.0,
+        actions=[slam_launch]
     )
     
     # Launch the ROS 2 Navigation Stack
@@ -253,22 +257,13 @@ def launch_setup(context: LaunchContext) -> list:
         output='screen'
     )
 
-    odom_checker = Node(
-        condition=IfCondition(debug),
-        package='topic_tools',
-        executable='echo',
-        name='odom_checker',
-        output='screen',
-        arguments=['/odom'],
-        parameters=[{'use_sim_time': use_sim_time.lower() == 'true'}]
-    )
-
     launch_nodes = [
         # map_to_odom_tf,
         set_model_path, 
         gazebo, 
         spawn, 
         ekf, 
+        # delayed_slam,
         rviz,
         # cmd_vel_relay,
         map_server,
@@ -280,10 +275,8 @@ def launch_setup(context: LaunchContext) -> list:
         behavior_server,
         bt_navigator,
         nav_lifecycle_manager,
-        slam_toolbox,
         # nav2_launch,
         tf_debug,
-        odom_checker,
     ]
 
     return launch_nodes
@@ -314,7 +307,7 @@ def generate_launch_description() -> LaunchDescription:
         ),
         DeclareLaunchArgument(
             "slam",
-            default_value="false",
+            default_value="true",
             choices=["true", "false"],
             description="Whether to run SLAM"
         ),

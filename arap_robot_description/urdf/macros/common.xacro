@@ -10,6 +10,7 @@
       <joint_name>front_right_wheel_joint</joint_name>
       <joint_name>rear_left_wheel_joint</joint_name>
       <joint_name>rear_right_wheel_joint</joint_name>
+      <update_rate>20</update_rate>
     </plugin>
   </xacro:macro>
 
@@ -22,13 +23,13 @@
     <frame_id>odom</frame_id>
     <child_frame_id>base_link</child_frame_id>
     <odom_topic>odom</odom_topic>
-    <odom_publisher_frequency>30</odom_publisher_frequency>
+    <odom_publisher_frequency>20.0</odom_publisher_frequency>
 
     <tf_topic>/tf</tf_topic>
     <publish_odom_tf>true</publish_odom_tf>
-    <publish_wheel_tf>true</publish_wheel_tf>
+    <publish_wheel_tf>false</publish_wheel_tf>
     <odometry_source>world</odometry_source>
-    <update_rate>30.0</update_rate>
+    <update_rate>20.0</update_rate>
   </xacro:macro>
 
   <xacro:macro name="wheel_setup" params="wheel_type config">
@@ -64,7 +65,7 @@
       <publish_visual_pose>false</publish_visual_pose>
       <publish_nested_model_pose>false</publish_nested_model_pose>
       <use_pose_vector_msg>true</use_pose_vector_msg>
-      <update_rate>30.0</update_rate>
+      <update_rate>20.0</update_rate>
     </plugin>
   </xacro:macro>
 

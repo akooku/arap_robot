@@ -63,6 +63,8 @@ def launch_setup(context: LaunchContext) -> list[Node]:
                 "robot_description": ParameterValue(robot_description, value_type=str),
                 "sim_mode": sim_mode.lower() == "true",
                 "use_sim_time": sim_mode.lower() == "true",
+                "publish_frequency": 20.0,
+                "ignore_timestamp": True,
             }
         ],
     )

@@ -2,20 +2,22 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<gazebo>
 		<plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
-			<!-- Wheel Information -->
-			<!-- <left_joint>front_left_wheel_joint</left_joint>
-			<right_joint>front_right_wheel_joint</right_joint> -->
-			<left_joint>rear_left_wheel_joint</left_joint>
-			<right_joint>rear_right_wheel_joint</right_joint>
-			<wheel_separation>${wheel_separation}</wheel_separation>
-			<wheel_radius>${wheel_radius}</wheel_radius>
+		<!-- Wheel Information -->
+		<left_joint>front_left_wheel_joint</left_joint>
+		<left_joint>rear_left_wheel_joint</left_joint>
+		<right_joint>front_right_wheel_joint</right_joint>
+		<right_joint>rear_right_wheel_joint</right_joint>
 
+		<wheel_separation>${wheel_separation}</wheel_separation>
+		<wheel_radius>${wheel_radius}</wheel_radius>
 
-			<!-- Limits -->
-			<max_linear_acceleration>${max_linear_acceleration}</max_linear_acceleration>
+		<!-- Additional control parameters -->
+		<max_linear_acceleration>${max_linear_acceleration}</max_linear_acceleration>
+  		<max_angular_acceleration>2.0</max_angular_acceleration>
 
-			<xacro:gazebo_control_common_plugin_params />
+		<skid_steering>true</skid_steering>
 
+		<xacro:gazebo_control_common_plugin_params />
 		</plugin>
 
 		<xacro:joint_state_publisher_plugin />

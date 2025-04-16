@@ -97,7 +97,7 @@ def generate_launch_description() -> LaunchDescription:
     return LaunchDescription([
         DeclareLaunchArgument(
             "world",
-            default_value="empty",
+            default_value="cafe",
             choices=["empty", "cafe", "house", "ashesi"],
             description="The world to load",
         ),

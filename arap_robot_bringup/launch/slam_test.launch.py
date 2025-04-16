@@ -55,19 +55,6 @@ def generate_launch_description():
         }.items(),
     )
 
-    # 2. SLAM Toolbox configuration
-    slam_params = {
-        'use_sim_time': True,
-        'map_frame': 'map',
-        'base_frame': 'base_link',
-        'odom_frame': 'odom',
-        'scan_topic': '/scan',
-        'mode': 'mapping',
-        'map_update_interval': 1.0,
-        'resolution': 0.05,
-        'max_laser_range': 20.0
-    }
-
     slam_params_file = os.path.join(pkg_navigation, 'config', 'arap_nav2_default_params.yaml')
 
     # SLAM Toolbox (delayed to ensure odometry is available)
@@ -113,9 +100,9 @@ def generate_launch_description():
     return LaunchDescription([
         set_model_path,
         gazebo,
-        delayed_slam,
         spawn_robot,
+        delayed_slam,
         rviz,
         teleop,
-        tf_debug
+        # tf_debug
     ])

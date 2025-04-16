@@ -19,11 +19,11 @@
 	<xacro:property name="track" value="0.13" />
 	<xacro:property name="wheel_vertical_offset" value="0.05" />
 
-	<xacro:property name="wheel_radius" value="0.045" />
+	<xacro:property name="wheel_radius" value="0.0325" />
 	<xacro:property name="wheel_length" value="0.001" />
 	<xacro:property name="wheel_mass" value="0.5" />
 
-	<xacro:property name="wheel_separation" value="0.175" />
+	<xacro:property name="wheel_separation" value="0.170" />
 	<xacro:property name="max_linear_acceleration" value="1.0" />
 
 	<xacro:property name="kingpin_width" value="0.122" />
@@ -42,6 +42,15 @@
 
 	<!-- Base link -->
 	<link name="base_link" />
+
+	    <!-- BASE FOOTPRINT -->
+    <link name="base_footprint"/>
+    
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
 
 	<!-- Chassis -->
 	<joint name="chassis_joint" type="fixed">

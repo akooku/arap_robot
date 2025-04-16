@@ -41,12 +41,17 @@
 				<surface>
 					<friction>
 						<ode>
-							<mu>10</mu>
-							<mu2>10</mu2>
-							<slip1>0.035</slip1>
-							<slip2>0</slip2>
+							<mu>1.0</mu>
+							<mu2>0.5</mu2>
+							<slip1>0.001</slip1>
+							<slip2>0.001</slip2>
 							<fdir1>0 0 1</fdir1>
 						</ode>
+						<bullet>
+							<friction>1</friction>
+							<friction2>1</friction2>
+							<rolling_friction>0.1</rolling_friction>
+						</bullet>
 					</friction>
 				</surface>
 			</collision>
