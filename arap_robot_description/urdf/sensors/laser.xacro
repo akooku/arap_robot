@@ -35,20 +35,20 @@
 				<pose> 0 0 0 0 0 0 </pose>
 				<always_on>true</always_on>
 				<visualize>true</visualize>
-				<update_rate>2</update_rate>
+				<update_rate>10</update_rate>
 				<lidar>
 					<scan>
 						<horizontal>
-							<samples>720</samples>
-							<resolution>1</resolution>
-							<min_angle>-2.09439504</min_angle>
-							<max_angle>2.09439504</max_angle>
+							<samples>120</samples>
+							<resolution>1.000000</resolution>
+							<min_angle>-3.14159</min_angle>
+							<max_angle>3.14159</max_angle>
 						</horizontal>
 					</scan>
 					<range>
-						<min>0.05</min>
-						<max>8.0</max>
-						<resolution>0.01</resolution>
+						<min>0.3</min>
+						<max>15.0</max>
+						<resolution>0.015</resolution>
 					</range>
 					<noise>
 						<type>gaussian</type>

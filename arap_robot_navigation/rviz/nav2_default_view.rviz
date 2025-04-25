@@ -13,6 +13,7 @@ Panels:
         - /Local Costmap1
         - /Global Plan1
         - /Local Plan1
+        - /Particle Cloud1
       Splitter Ratio: 0.5
     Tree Height: 739
   - Class: rviz_common/Selection

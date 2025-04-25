@@ -29,7 +29,7 @@
     <publish_odom_tf>true</publish_odom_tf>
     <publish_wheel_tf>false</publish_wheel_tf>
     <odometry_source>world</odometry_source>
-    <update_rate>20.0</update_rate>
+    <update_rate>100.0</update_rate>
   </xacro:macro>
 
   <xacro:macro name="wheel_setup" params="wheel_type config">

@@ -2,20 +2,34 @@
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 	<gazebo>
 		<plugin name="gz::sim::systems::DiffDrive" filename="gz-sim-diff-drive-system">
+
+		<update_rate>100</update_rate>
+		<num_wheel_pairs>2</num_wheel_pairs>
+
 		<!-- Wheel Information -->
 		<left_joint>front_left_wheel_joint</left_joint>
 		<left_joint>rear_left_wheel_joint</left_joint>
 		<right_joint>front_right_wheel_joint</right_joint>
 		<right_joint>rear_right_wheel_joint</right_joint>
 
-		<wheel_separation>${wheel_separation}</wheel_separation>
-		<wheel_radius>${wheel_radius}</wheel_radius>
+		<wheel_separation>0.172</wheel_separation>
+		<!-- <wheel_radius>${wheel_radius}</wheel_radius> -->
+		<wheel_radius>0.0225</wheel_radius> <!-- Wheel Diameter = 0.09; Wheel Radius = 0.045 -->
 
-		<!-- Additional control parameters -->
-		<max_linear_acceleration>${max_linear_acceleration}</max_linear_acceleration>
-  		<max_angular_acceleration>2.0</max_angular_acceleration>
+		<!-- Limits -->
+		<max_wheel_torque>100</max_wheel_torque>
+		<max_wheel_acceleration>5.0</max_wheel_acceleration>
+		
+		<command_topic>cmd_vel</command_topic> <!-- Fully qualified topics begin with '/' -->
+		<publish_odom>true</publish_odom>
+		<publish_odom_tf>true</publish_odom_tf>
+		<publish_wheel_tf>true</publish_wheel_tf>
+		<odometry_topic>odom</odometry_topic>
+		<odometry_frame>odom</odometry_frame>
+		<robot_base_frame>base_footprint</robot_base_frame>
+		<odometry_source>1</odometry_source>
 
-		<skid_steering>true</skid_steering>
+		<skid_steering>false</skid_steering>
 
 		<xacro:gazebo_control_common_plugin_params />
 		</plugin>

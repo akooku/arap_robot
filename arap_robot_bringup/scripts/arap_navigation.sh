@@ -11,36 +11,10 @@ trap 'cleanup' SIGINT SIGTERM
 
 # Set up cleanup trap
 trap 'cleanup' SIGINT SIGTERM
- 
-# Create a temporary map file for SLAM mode
-if [ "$1" = "slam" ]; then
-  echo "Running in SLAM mode - creating a temporary map file"
-  mkdir -p /tmp/maps
-  echo "image: /tmp/maps/dummy.pgm
-resolution: 0.05
-origin: [-0.50, -0.20, 0.0]
-negate: 0
-occupied_thresh: 0.65
-free_thresh: 0.196" > /tmp/maps/dummy.yaml
-  
-  # Create an empty 10x10 PGM file
-  echo "P5
-  100 100
-  255" > /tmp/maps/dummy.pgm
-  for i in {1..10000}; do
-    printf "\xff" >> /tmp/maps/dummy.pgm
-  done
-  
-  SLAM_ARG="slam:=true"
-  MAP_ARG="map:=/tmp/maps/dummy.yaml"
-else
-  SLAM_ARG="slam:=false"
-  MAP_ARG="map:=/home/ubuntu/ros2_ws/src/arap_robot/arap_robot_navigation/maps/cafe_map.yaml"
-fi  
 
 # Add this before launching your main system
-ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock@gz.msgs.Clock &
-sleep 5
+# ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock@gz.msgs.Clock &
+# sleep 5
 
 # For cafe.world -> z:=0.20
 # For house.world -> z:=0.05
@@ -59,8 +33,6 @@ ros2 launch arap_robot_bringup arap_navigation.launch.py \
    pitch:=0.0 \
    yaw:=0.0 \
    debug:=true &
-  #  "$SLAM_ARG" \
-  # "$MAP_ARG" 
 
 echo "⏳ Waiting 25 seconds for simulation to initialize..."
 sleep 25

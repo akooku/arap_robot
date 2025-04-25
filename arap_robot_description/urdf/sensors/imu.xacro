@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
     <xacro:macro name="imu" params="parent_prefix *joint_pose">
+
         <link name='imu_link'>
             <pose>0 0 0 0 0 0</pose>
             <inertial>
@@ -24,18 +25,42 @@
                 </geometry>
             </collision>
         </link>
+
         <joint type="fixed" name="imu_joint">
             <xacro:insert_block name="joint_pose" />
             <parent link="${parent_prefix}" />
             <child link="imu_link" />
         </joint>
+
         <gazebo reference="imu_link">
+            <gravity>true</gravity>
             <sensor name="imu" type="imu">
                 <always_on>true</always_on>
                 <update_rate>100</update_rate>
                 <frame_name>imu_link</frame_name>
                 <visualize>true</visualize>
                 <imu>
+                    <orientation>
+                        <x>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-3</stddev>
+                            </noise>
+                        </x>
+                        <y>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-3</stddev>
+                            </noise>
+                        </y>
+                        <z>
+                            <noise type="gaussian">
+                                <mean>0.0</mean>
+                                <stddev>2e-3</stddev>
+                            </noise>
+                        </z>
+                    </orientation>
+
                     <angular_velocity>
                         <x>
                             <noise type="gaussian">
@@ -56,6 +81,7 @@
                             </noise>
                         </z>
                     </angular_velocity>
+
                     <linear_acceleration>
                         <x>
                             <noise type="gaussian">

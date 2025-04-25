@@ -9,7 +9,7 @@
 
 			<axis xyz="0 ${reflect*1} 0">
 				<limit>
-					<effort>20</effort>
+					<effort>100</effort>
 				</limit>
 			</axis>
 
@@ -42,16 +42,13 @@
 					<friction>
 						<ode>
 							<mu>1.0</mu>
-							<mu2>0.5</mu2>
-							<slip1>0.001</slip1>
-							<slip2>0.001</slip2>
-							<fdir1>0 0 1</fdir1>
+							<mu2>1.0</mu2>
+							<kp>100.0</kp>
+							<kd>1.0</kd>
+							<minDepth>0.01</minDepth>
+							<fdir1>1 0 0</fdir1>
+							<maxContacts value="64" />
 						</ode>
-						<bullet>
-							<friction>1</friction>
-							<friction2>1</friction2>
-							<rolling_friction>0.1</rolling_friction>
-						</bullet>
 					</friction>
 				</surface>
 			</collision>

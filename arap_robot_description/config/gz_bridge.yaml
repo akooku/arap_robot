@@ -5,24 +5,6 @@
   ros_type_name: "rosgraph_msgs/msg/Clock"
   gz_type_name: "gz.msgs.Clock"
   direction: GZ_TO_ROS
-  
-# RGBD Camera topics
-- ros_topic_name: "cam_one/color/camera_info"
-  gz_topic_name: "cam_one/camera_info"
-  ros_type_name: "sensor_msgs/msg/CameraInfo"
-  gz_type_name: "gz.msgs.CameraInfo"
-  direction: GZ_TO_ROS
-  lazy: true  # Determines whether connections are created immediately at startup
-              # (false) or only when data is actually requested by a subscriber (true).
-              # This helps conserve system resources at the cost of potential initial
-              # delays in data flow.
-
-- ros_topic_name: "cam_one/depth/color/points"
-  gz_topic_name: "cam_one/points"
-  ros_type_name: "sensor_msgs/msg/PointCloud2"
-  gz_type_name: "gz.msgs.PointCloudPacked"
-  direction: GZ_TO_ROS
-  lazy: true
 
 # LIDAR configuration
 - ros_topic_name: "scan"
@@ -67,3 +49,21 @@
   ros_type_name: "sensor_msgs/msg/Imu"
   gz_type_name: "gz.msgs.IMU"
   direction: GZ_TO_ROS
+
+  # RGBD Camera topics
+- ros_topic_name: "cam_one/color/camera_info"
+  gz_topic_name: "cam_one/camera_info"
+  ros_type_name: "sensor_msgs/msg/CameraInfo"
+  gz_type_name: "gz.msgs.CameraInfo"
+  direction: GZ_TO_ROS
+  lazy: true  # Determines whether connections are created immediately at startup
+              # (false) or only when data is actually requested by a subscriber (true).
+              # This helps conserve system resources at the cost of potential initial
+              # delays in data flow.
+
+- ros_topic_name: "cam_one/depth/color/points"
+  gz_topic_name: "cam_one/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "gz.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
+  lazy: true

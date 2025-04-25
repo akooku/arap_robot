@@ -15,15 +15,21 @@
 	<!-- Robot Variables -->
 	<xacro:property name="base_mass" value="2.1557" />
 
+	<!-- Robot Geometries -->
+	<xacro:property name="base_x_size" value="0.13" />
+	<xacro:property name="base_y_size" value="0.12" />
+	<xacro:property name="base_z_size" value="0.1" />
+
 	<xacro:property name="wheelbase" value="0.2" />
 	<xacro:property name="track" value="0.13" />
 	<xacro:property name="wheel_vertical_offset" value="0.05" />
 
-	<xacro:property name="wheel_radius" value="0.0325" />
-	<xacro:property name="wheel_length" value="0.001" />
-	<xacro:property name="wheel_mass" value="0.5" />
+	<xacro:property name="wheel_radius" value="0.0225" /> <!-- Possible values: (0.0325 / 2), 0.048, 0.042, 0.01625 -->
+	<xacro:property name="wheel_length" value="0.045" />
 
-	<xacro:property name="wheel_separation" value="0.170" />
+	<xacro:property name="wheel_mass" value="0.5" /> <!-- Initially 0.5 -->
+
+	<xacro:property name="wheel_separation" value="0.13" /> <!-- Initially 0.170 (Calculates the distance between the two wheels - on the y-axis) -->
 	<xacro:property name="max_linear_acceleration" value="1.0" />
 
 	<xacro:property name="kingpin_width" value="0.122" />
@@ -41,24 +47,23 @@
 	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/camera.xacro" />
 
 	<!-- Base link -->
-	<link name="base_link" />
-
-	    <!-- BASE FOOTPRINT -->
+	<link name="base_link"/>
+	
+	<!-- BASE FOOTPRINT -->
     <link name="base_footprint"/>
     
-    <joint name="base_footprint_joint" type="fixed">
+    <joint name="base_joint" type="fixed">
         <parent link="base_link"/>
         <child link="base_footprint"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
     </joint>
 
 	<!-- Chassis -->
 	<joint name="chassis_joint" type="fixed">
-		<parent link="base_link" />
-		<child link="chassis" />
-		<origin xyz="0.0 0.0 0.15" />
+		<parent link="base_link"/>
+		<child link="chassis"/>
+		<origin xyz="0.0 0.0 0.15"/>
 	</joint>
-
 	<link name="chassis">
 		<visual name="chassis_visual">
 			<origin xyz="0 0 -0.15" rpy="0 0 1.57" />
@@ -70,8 +75,7 @@
 		<collision name="chassis_collision">
 			<origin xyz="0 0 -0.15" rpy="0 0 1.57" />
 			<geometry>
-				<mesh filename="package://arap_robot_description/meshes/chassis/chassis.stl"
-					scale="1 1 1" />
+				<mesh filename="package://arap_robot_description/meshes/chassis/chassis.stl" scale="1 1 1" />
 			</geometry>
 		</collision>
 		<inertial name="chassis_inertial">
@@ -88,7 +92,7 @@
 	</xacro:laser>
 
 	<xacro:camera parent_prefix="chassis">
-		<origin xyz="0.084 0 0.026" rpy="0 0 0" />
+		<origin xyz="0.084 0 0.03" rpy="0 0 0" />
 	</xacro:camera>
 
 	<xacro:imu parent_prefix="chassis">

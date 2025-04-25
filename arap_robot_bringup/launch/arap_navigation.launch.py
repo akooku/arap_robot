@@ -118,7 +118,20 @@ def launch_setup(context: LaunchContext) -> list:
     #     parameters=[{"use_sim_time": use_sim_time}]
     # )
     
-    # Add map server
+    # Get absolute map path
+    map_path = map_yaml_file
+    if not map_path.startswith('/'):
+        # If it's not absolute, make it absolute
+        map_path = join(get_package_share_directory(NAVIGATION_PACKAGE), "maps", map_path)
+    
+    print(f"Loading map from: {map_path}")
+
+    # Verify the map file exists
+    import os
+    if not os.path.exists(map_path):
+        print(f"ERROR: Map file {map_path} does not exist!")
+
+    # Add map server node
     map_server = Node(
         package='nav2_map_server',
         executable='map_server',
@@ -126,7 +139,7 @@ def launch_setup(context: LaunchContext) -> list:
         output='screen',
         parameters=[
             {'use_sim_time': use_sim_time.lower() == 'true'},
-            {'yaml_filename': map_yaml_file}
+            {'yaml_filename': map_path}
         ]
     )
 
@@ -238,27 +251,7 @@ def launch_setup(context: LaunchContext) -> list:
         }.items()
     )
 
-    # Map to Odom static transform [TEMPORARY SOLUTION]
-    map_to_odom_tf = Node(
-        condition=UnlessCondition(slam),
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='static_map_to_odom',
-        arguments=['0', '0', '0', '0', '0', '0', 'map', 'odom'],
-        parameters=[{'use_sim_time': use_sim_time.lower() == 'true'}]
-    )
-
-    # Debug node to print TF tree
-    tf_debug = Node(
-        condition=IfCondition(debug),  # Add a debug launch argument
-        package='tf2_tools',
-        executable='view_frames',
-        name='view_frames',
-        output='screen'
-    )
-
     launch_nodes = [
-        # map_to_odom_tf,
         set_model_path, 
         gazebo, 
         spawn, 
@@ -276,7 +269,6 @@ def launch_setup(context: LaunchContext) -> list:
         bt_navigator,
         nav_lifecycle_manager,
         # nav2_launch,
-        tf_debug,
     ]
 
     return launch_nodes
