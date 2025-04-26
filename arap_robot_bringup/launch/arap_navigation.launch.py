@@ -20,7 +20,6 @@ from launch.actions import (
     DeclareLaunchArgument,
     IncludeLaunchDescription,
     OpaqueFunction,
-    AppendEnvironmentVariable,
     TimerAction
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -35,7 +34,7 @@ GAZEBO_PACKAGE = "arap_robot_gazebo"
 NAVIGATION_PACKAGE = "arap_robot_navigation"
 
 def launch_setup(context: LaunchContext) -> list:
-    descr_pkg_share = get_package_share_directory(PACKAGE_NAME)
+    # descr_pkg_share = get_package_share_directory(PACKAGE_NAME)
     loc_pkg_share = get_package_share_directory(LOCALIZATION_PACKAGE)
     gz_pkg_share = get_package_share_directory(GAZEBO_PACKAGE)
     nav_pkg_share = get_package_share_directory(NAVIGATION_PACKAGE)
@@ -50,43 +49,12 @@ def launch_setup(context: LaunchContext) -> list:
     use_sim_time = LaunchConfiguration("use_sim_time").perform(context)
     map_yaml_file = LaunchConfiguration("map").perform(context)
     autostart = LaunchConfiguration("autostart").perform(context)
+    use_composition = LaunchConfiguration("use_composition").perform(context)
+    use_respawn = LaunchConfiguration("use_respawn").perform(context)
     use_rviz = LaunchConfiguration("use_rviz").perform(context)
     rviz_config = LaunchConfiguration("rviz_config").perform(context)
     slam = LaunchConfiguration("slam").perform(context)
-    debug = LaunchConfiguration("debug").perform(context)
-    
-    # World path
-    world_path = join(gz_pkg_share, "worlds", f"{world}.world")
-    
-    # Append GZ_SIM_RESOURCE_PATH
-    model_path = join(gz_pkg_share, "models")
-    set_model_path = AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", model_path)
-    
-    # Launch Gazebo with specified world
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            join(
-                get_package_share_directory("ros_gz_sim"),
-                "launch",
-                "gz_sim.launch.py",
-            )
-        ]),
-        launch_arguments={
-            "gz_args": f"-r -v4 {world_path}",
-            "on_exit_shutdown": "true"
-        }.items(),
-    )
-    
-    # Spawn the robot immediately
-    spawn = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([
-            join(descr_pkg_share, "launch", "spawn.launch.py")
-        ]),
-        launch_arguments={
-            "use_sim_time": use_sim_time
-        }.items(),
-    )
-    
+
     # Start EKF immediately
     ekf = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -98,143 +66,26 @@ def launch_setup(context: LaunchContext) -> list:
         }.items(),
     )
     
+    # Launch Gazebo
+    gz_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            join(gz_pkg_share, "launch", "sim.launch.py")
+        ]),
+        launch_arguments={
+            "world": world,
+            "use_sim_time": use_sim_time
+        }.items(),
+    )
+
     # RViz
     rviz_config_file = join(nav_pkg_share, "rviz", f"{rviz_config}.rviz")
 
-    rviz = Node(
+    rviz_cmd = Node(
         condition=IfCondition(use_rviz),
         package="rviz2",
         executable="rviz2",
         output="screen",
         arguments=["-d", rviz_config_file],
-    )
-    
-    # # Add cmd_vel relay node if needed
-    # cmd_vel_relay = Node(
-    #     package=NAVIGATION_PACKAGE,
-    #     executable="cmd_vel_relay",
-    #     name="cmd_vel_relay",
-    #     output="screen",
-    #     parameters=[{"use_sim_time": use_sim_time}]
-    # )
-    
-    # Get absolute map path
-    map_path = map_yaml_file
-    if not map_path.startswith('/'):
-        # If it's not absolute, make it absolute
-        map_path = join(get_package_share_directory(NAVIGATION_PACKAGE), "maps", map_path)
-    
-    print(f"Loading map from: {map_path}")
-
-    # Verify the map file exists
-    import os
-    if not os.path.exists(map_path):
-        print(f"ERROR: Map file {map_path} does not exist!")
-
-    # Add map server node
-    map_server = Node(
-        package='nav2_map_server',
-        executable='map_server',
-        name='map_server',
-        output='screen',
-        parameters=[
-            {'use_sim_time': use_sim_time.lower() == 'true'},
-            {'yaml_filename': map_path}
-        ]
-    )
-
-    # Add lifecycle manager for map server
-    map_lifecycle_manager = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_map',
-        output='screen',
-        parameters=[
-            {'use_sim_time': use_sim_time.lower() == 'true'},
-            {'autostart': autostart.lower() == 'true'},
-            {'node_names': ['map_server']}
-        ]
-    )
-
-    params_file = join(nav_pkg_share, 'config', 'arap_nav2_default_params.yaml')
-
-    # Add AMCL for localization
-    amcl = Node(
-        package='nav2_amcl',
-        executable='amcl',
-        name='amcl',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # Add lifecycle manager for AMCL
-    localization_lifecycle_manager = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_localization',
-        output='screen',
-        parameters=[
-            {'use_sim_time': use_sim_time.lower() == 'true'},
-            {'autostart': autostart.lower() == 'true'},
-            {'node_names': ['amcl']}
-        ]
-    )
-
-    # Navigation core components
-    controller_server = Node(
-        package='nav2_controller',
-        executable='controller_server',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    planner_server = Node(
-        package='nav2_planner',
-        executable='planner_server',
-        name='planner_server',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    behavior_server = Node(
-        package='nav2_behaviors',
-        executable='behavior_server',
-        name='behavior_server',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    bt_navigator = Node(
-        package='nav2_bt_navigator',
-        executable='bt_navigator',
-        name='bt_navigator',
-        output='screen',
-        parameters=[params_file]
-    )
-
-    # Navigation lifecycle manager
-    nav_lifecycle_manager = Node(
-        package='nav2_lifecycle_manager',
-        executable='lifecycle_manager',
-        name='lifecycle_manager_navigation',
-        output='screen',
-        parameters=[
-            {'use_sim_time': use_sim_time.lower() == 'true'},
-            {'autostart': autostart.lower() == 'true'},
-            {'node_names': ['controller_server', 'planner_server', 'behavior_server', 'bt_navigator']}
-        ]
-    )
-
-    # SLAM Toolbox (delayed to ensure odometry is available)
-    slam_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(join(pkg_slam_toolbox, 'launch', 'online_async_launch.py')),
-        launch_arguments={'use_sim_time': 'true',
-                          'slam_params_file':params_file}.items()
-    )
-
-    delayed_slam = TimerAction(
-        period=15.0,
-        actions=[slam_launch]
     )
     
     # Launch the ROS 2 Navigation Stack
@@ -247,28 +98,17 @@ def launch_setup(context: LaunchContext) -> list:
             'map': map_yaml_file,
             'use_sim_time': use_sim_time,
             'params_file': join(nav_pkg_share, 'config', 'arap_nav2_default_params.yaml'),
-            'autostart': autostart
+            'autostart': autostart,
+            'use_composition': use_composition,
+            'use_respawn': use_respawn,
         }.items()
     )
 
     launch_nodes = [
-        set_model_path, 
-        gazebo, 
-        spawn, 
-        ekf, 
-        # delayed_slam,
-        rviz,
-        # cmd_vel_relay,
-        map_server,
-        map_lifecycle_manager,
-        amcl,
-        localization_lifecycle_manager,
-        controller_server,
-        planner_server,
-        behavior_server,
-        bt_navigator,
-        nav_lifecycle_manager,
-        # nav2_launch,
+        ekf,
+        gz_launch, 
+        rviz_cmd, 
+        nav2_launch,
     ]
 
     return launch_nodes
@@ -299,8 +139,8 @@ def generate_launch_description() -> LaunchDescription:
         ),
         DeclareLaunchArgument(
             "slam",
-            default_value="true",
-            choices=["true", "false"],
+            default_value="True",
+            choices=["True", "False"],
             description="Whether to run SLAM"
         ),
         DeclareLaunchArgument(
@@ -308,6 +148,19 @@ def generate_launch_description() -> LaunchDescription:
             default_value="true",
             choices=["true", "false"],
             description="Automatically start up the nav2 stack"
+        ),
+
+        DeclareLaunchArgument(
+            "use_composition",
+            default_value="True",
+            choices=["True", "False"],
+            description="Use composition for nav2 nodes"
+        ),
+        DeclareLaunchArgument(
+            "use_respawn",
+            default_value="False",
+            choices=["True", "False"],
+            description="Use respawn for nav2 nodes when composition is disabled"
         ),
         
         # Visualization

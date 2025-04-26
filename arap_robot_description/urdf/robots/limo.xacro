@@ -45,18 +45,18 @@
 	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/laser.xacro" />
 	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/imu.xacro" />
 	<xacro:include filename="$(find arap_robot_description)/urdf/sensors/camera.xacro" />
-
-	<!-- Base link -->
-	<link name="base_link"/>
 	
 	<!-- BASE FOOTPRINT -->
     <link name="base_footprint"/>
     
-    <joint name="base_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="base_footprint"/>
-        <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
-    </joint>
+	<joint name="base_joint" type="fixed">
+	<parent link="base_footprint"/>
+	<child link="base_link"/>
+	<origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+	</joint>
+
+	<!-- Base link -->
+	<link name="base_link"/>
 
 	<!-- Chassis -->
 	<joint name="chassis_joint" type="fixed">

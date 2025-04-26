@@ -142,7 +142,7 @@ def generate_launch_description() -> LaunchDescription:
         ),
         DeclareLaunchArgument(
             "use_rviz",
-            default_value="true",
+            default_value="false",
             choices=["true", "false"],
             description="Whether to start RVIZ",
         ),

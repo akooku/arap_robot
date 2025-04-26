@@ -12,9 +12,14 @@ trap 'cleanup' SIGINT SIGTERM
 # Set up cleanup trap
 trap 'cleanup' SIGINT SIGTERM
 
-# Add this before launching your main system
-# ros2 run ros_gz_bridge parameter_bridge /clock@rosgraph_msgs/msg/Clock@gz.msgs.Clock &
-# sleep 5
+# Check if SLAM argument is provided
+if [ "$1" = "slam" ]; then
+    echo "🚀 Launching simulation for ARAP Robot with SLAM..."
+    SLAM_ARG="slam:=True"
+else
+    echo "🚀 Launching simulation for ARAP Robot without SLAM..."
+    SLAM_ARG="slam:=False"
+fi
 
 # For cafe.world -> z:=0.20
 # For house.world -> z:=0.05
@@ -22,6 +27,7 @@ trap 'cleanup' SIGINT SIGTERM
 
 echo "🚀 Launching simulation for ARAP Robot..."
 ros2 launch arap_robot_bringup arap_navigation.launch.py \
+   autostart:=true \
    world:=cafe \
    use_sim_time:=true \
    use_rviz:=true \
@@ -32,7 +38,7 @@ ros2 launch arap_robot_bringup arap_navigation.launch.py \
    roll:=0.0 \
    pitch:=0.0 \
    yaw:=0.0 \
-   debug:=true &
+   "$SLAM_ARG" &
 
 echo "⏳ Waiting 25 seconds for simulation to initialize..."
 sleep 25

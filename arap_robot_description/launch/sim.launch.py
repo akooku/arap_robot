@@ -101,5 +101,11 @@ def generate_launch_description() -> LaunchDescription:
             choices=["empty", "cafe", "house"],
             description="The world to load",
         ),
+        DeclareLaunchArgument(
+            "use_sim_time",
+            default_value="true",
+            choices=["true", "false"],
+            description="Use simulation time",
+        ),
         OpaqueFunction(function=launch_setup),
     ])
