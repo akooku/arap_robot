@@ -33,7 +33,7 @@ install(PROGRAMS
 # C++ Executables
 # ========================
 install(
-  DIRECTORY config maps rviz
+  DIRECTORY config maps rviz launch
   DESTINATION share/${PROJECT_NAME}
 )
 

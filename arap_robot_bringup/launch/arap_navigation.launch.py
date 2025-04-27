@@ -90,7 +90,7 @@ def launch_setup(context: LaunchContext) -> list:
     
     # Launch the ROS 2 Navigation Stack
     nav2_launch = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(join(nav2_launch_dir, 'bringup_launch.py')),
+        PythonLaunchDescriptionSource(join(nav_pkg_share, 'launch', 'bringup_launch.py')),
         launch_arguments={
             'namespace': '',
             'use_namespace': 'false',
@@ -101,6 +101,7 @@ def launch_setup(context: LaunchContext) -> list:
             'autostart': autostart,
             'use_composition': use_composition,
             'use_respawn': use_respawn,
+            'lifecycle_nodes': ['map_server', 'amcl', 'controller_server', 'planner_server', 'behavior_server', 'bt_navigator', 'waypoint_follower', 'velocity_smoother', 'collision_monitor', 'smoother_server']
         }.items()
     )
 
@@ -134,7 +135,7 @@ def generate_launch_description() -> LaunchDescription:
         # Navigation configuration
         DeclareLaunchArgument(
             "map",
-            default_value=join(get_package_share_directory(NAVIGATION_PACKAGE), "maps", "cafe_map.yaml"),
+            default_value=join(get_package_share_directory(NAVIGATION_PACKAGE), "maps", "my_cafe_map_edited.yaml"),
             description="Full path to map file to load"
         ),
         DeclareLaunchArgument(

@@ -6,11 +6,11 @@ amcl:
     odom_frame_id: "odom"
     scan_topic: scan
     map_topic: map
-    alpha1: 0.1
-    alpha2: 0.1
-    alpha3: 0.1
-    alpha4: 0.1
-    alpha5: 0.1
+    alpha1: 0.2
+    alpha2: 0.2
+    alpha3: 0.2
+    alpha4: 0.2
+    alpha5: 0.2
     service_introspection_mode: "disabled"
     beam_skip_distance: 0.5
     beam_skip_error_threshold: 0.9
@@ -22,8 +22,8 @@ amcl:
     laser_min_range: -1.0
     laser_model_type: "likelihood_field"
     max_beams: 60
-    max_particles: 5000
-    min_particles: 1000
+    max_particles: 2000
+    min_particles: 500
     pf_err: 0.05
     pf_z: 0.99
     recovery_alpha_fast: 0.0
@@ -52,7 +52,7 @@ amcl:
 bt_navigator:
   ros__parameters:
     global_frame: map
-    robot_base_frame: base_footprint
+    robot_base_frame: base_link
     odom_topic: /odometry/filtered
     bt_loop_duration: 10
     default_server_timeout: 20
@@ -217,12 +217,12 @@ local_costmap:
       update_frequency: 5.0
       publish_frequency: 5.0
       global_frame: odom
-      robot_base_frame: base_footprint
+      robot_base_frame: base_link
       rolling_window: true
-      width: 20
-      height: 20
+      width: 5
+      height: 5
       resolution: 0.05
-      robot_radius: 0.07
+      robot_radius: 0.0225  # Based on half of the robot's width
       plugins: ["obstacle_layer", "voxel_layer", "denoise_layer", "inflation_layer"]
       obstacle_layer:
         plugin: "nav2_costmap_2d::ObstacleLayer"
@@ -265,8 +265,8 @@ local_costmap:
         group_connectivity_type: 8
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 2.0
+        cost_scaling_factor: 2.58
+        inflation_radius: 1.75
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: true
@@ -278,8 +278,8 @@ global_costmap:
       update_frequency: 5.0
       publish_frequency: 5.0
       global_frame: map
-      robot_base_frame: base_footprint
-      robot_radius: 0.07
+      robot_base_frame: base_link
+      robot_radius: 0.0225  # Robot width / 2
       resolution: 0.05
       track_unknown_space: true
       plugins: ["static_layer", "obstacle_layer", "voxel_layer", "inflation_layer"]
@@ -322,11 +322,9 @@ global_costmap:
           data_type: "PointCloud2"
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 3.0
-        inflation_radius: 2.0
+        cost_scaling_factor: 2.58
+        inflation_radius: 1.75
       always_send_full_costmap: true
-      # width: 10.4 # = 208 * 0.05
-      # height: 23.7 # = 474 * 0.05
 
 map_saver:
   ros__parameters:
@@ -374,7 +372,7 @@ behavior_server:
       plugin: "nav2_behaviors::AssistedTeleop"
     local_frame: odom
     global_frame: map
-    robot_base_frame: base_footprint
+    robot_base_frame: base_link
     transform_tolerance: 0.1
     simulate_ahead_time: 2.0
     max_rotational_vel: 0.50
@@ -439,6 +437,7 @@ collision_monitor:
 
 slam_toolbox:
   ros__parameters:
+
     # Plugin params
     solver_plugin: solver_plugins::CeresSolver
     ceres_linear_solver: SPARSE_NORMAL_CHOLESKY
@@ -450,33 +449,40 @@ slam_toolbox:
     # ROS Parameters
     odom_frame: odom
     map_frame: map
-    base_frame: base_footprint
+    base_frame: base_footprint # base_link or base_footprint
     scan_topic: /scan
     use_map_saver: true
-    mode: mapping
+    mode: mapping #localization
 
-    debug_logging: true
+    # if you'd like to immediately start continuing a map at a given pose
+    # or at the dock, but they are mutually exclusive, if pose is given
+    # will use pose
+    #map_file_name: test_steve
+    #map_start_pose: [0.0, 0.0, 0.0]
+    #map_start_at_dock: true
+
+    debug_logging: false
     throttle_scans: 1
-    transform_publish_period: 0.02
-    map_update_interval: 2.0
+    transform_publish_period: 0.02 #if 0 never publishes odometry
+    map_update_interval: 5.0
     resolution: 0.05
-    max_laser_range: 20.0
-    minimum_time_interval: 0.2
+    max_laser_range: 15.0 #for rastering images
+    minimum_time_interval: 0.5
     transform_timeout: 0.2
     tf_buffer_duration: 30.
-    stack_size_to_use: 40000000
+    stack_size_to_use: 40000000 #// program needs a larger stack size to serialize large maps
     enable_interactive_mode: true
 
     # General Parameters
     use_scan_matching: true
     use_scan_barycenter: true
-    minimum_travel_distance: 0.1
-    minimum_travel_heading: 0.1
-    scan_buffer_size: 20
-    scan_buffer_maximum_scan_distance: 20.0
+    minimum_travel_distance: 0.5
+    minimum_travel_heading: 0.5
+    scan_buffer_size: 10
+    scan_buffer_maximum_scan_distance: 10.0
     link_match_minimum_response_fine: 0.1
-    link_scan_maximum_distance: 2.0
-    loop_search_maximum_distance: 5.0
+    link_scan_maximum_distance: 1.5
+    loop_search_maximum_distance: 3.0
     do_loop_closing: true
     loop_match_minimum_chain_size: 10
     loop_match_maximum_variance_coarse: 3.0
@@ -484,7 +490,7 @@ slam_toolbox:
     loop_match_minimum_response_fine: 0.45
 
     # Correlation Parameters - Correlation Parameters
-    correlation_search_space_dimension: 1.0
+    correlation_search_space_dimension: 0.5
     correlation_search_space_resolution: 0.01
     correlation_search_space_smear_deviation: 0.1
 
@@ -494,8 +500,8 @@ slam_toolbox:
     loop_search_space_smear_deviation: 0.03
 
     # Scan Matcher Parameters
-    distance_variance_penalty: 0.3
-    angle_variance_penalty: 0.5
+    distance_variance_penalty: 0.5
+    angle_variance_penalty: 1.0
 
     fine_search_angle_offset: 0.00349
     coarse_search_angle_offset: 0.349

@@ -1,0 +1,12 @@
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/uninstall.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/arap_robot_navigation_uninstall.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/ament_cmake_python_copy_arap_robot_navigation.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/ament_cmake_python_copy_arap_robot_navigation_setup.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/ament_cmake_python_build_arap_robot_navigation_egg.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/test.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/edit_cache.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/rebuild_cache.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/list_install_components.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/install.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/install/local.dir
+/home/aix/ros2_ws/src/arap_robot/build/arap_robot_navigation/CMakeFiles/install/strip.dir
