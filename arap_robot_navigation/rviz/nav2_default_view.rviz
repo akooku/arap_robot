@@ -230,7 +230,7 @@ Visualization Manager:
     - Alpha: 1
       Class: nav2_rviz_plugins/ParticleCloud
       Color: 0; 180; 0
-      Enabled: false
+      Enabled: true
       Max Arrow Length: 0.30000001192092896
       Min Arrow Length: 0.019999999552965164
       Name: Amcl Particle Swarm
@@ -242,7 +242,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Best Effort
         Value: /particle_cloud
-      Value: false
+      Value: true
     - Class: rviz_common/Group
       Displays:
         - Alpha: 0.30000001192092896

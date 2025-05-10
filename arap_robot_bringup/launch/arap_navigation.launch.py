@@ -105,11 +105,19 @@ def launch_setup(context: LaunchContext) -> list:
         }.items()
     )
 
+    multi_map_manager_node = Node(
+        package='arap_robot_custom_feature',
+        executable='multi_map_manager_node.py',  # Use the left side of your console_scripts entry
+        name='multi_map_manager',
+        output='screen'
+    )
+
     launch_nodes = [
         ekf,
         gz_launch, 
         rviz_cmd, 
         nav2_launch,
+        # multi_map_manager_node
     ]
 
     return launch_nodes
@@ -140,7 +148,7 @@ def generate_launch_description() -> LaunchDescription:
         ),
         DeclareLaunchArgument(
             "slam",
-            default_value="True",
+            default_value="False",
             choices=["True", "False"],
             description="Whether to run SLAM"
         ),

@@ -27,6 +27,7 @@ from launch.actions import (
 )
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
 
 # CONSTANTS
 DESCR = "arap_robot_description"
@@ -81,7 +82,17 @@ def launch_setup(context: LaunchContext) -> list:
         PythonLaunchDescriptionSource([join(pkg_descr, "launch", "spawn.launch.py")]),
     )
 
-    return [set_model_path, gazebo, spawn]
+    # Configure the bridge with QoS settings
+    bridge_config = join(pkg_gz, "config", "gazebo_bridge_params.yaml")
+    bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        name='parameter_bridge',
+        parameters=[bridge_config],
+        output='screen'
+    )
+
+    return [set_model_path, gazebo, spawn, bridge]
 
 
 def generate_launch_description() -> LaunchDescription:

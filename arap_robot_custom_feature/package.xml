@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>arap_robot_custom_feature</name>
+  <version>0.0.0</version>
+  <description>Multi-map manager for campus navigation</description>
+  <maintainer email="akooku12@gmail.com">aix</maintainer>
+  <license>TODO: License declaration</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <buildtool_depend>ament_cmake_python</buildtool_depend>
+
+  <!-- For Python -->
+  <depend>rclpy</depend>
+  <depend>python3</depend>
+
+  <!-- For C++ -->
+  <depend>rclcpp</depend>
+  <depend>rclcpp_action</depend>
+
+  <!-- Other Dependencies -->
+  <depend>geometry_msgs</depend>
+  <depend>rcl_interfaces</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>std_srvs</depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
